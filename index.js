@@ -36,7 +36,7 @@ app.post('/', function (req, res) {
           },
           {
             name: 'Red',
-            value: 'blue',
+            value: 'red',
           },
         ],
       },
