@@ -13,7 +13,7 @@ $ npm install
 ## Usage
 
 ```
-$ node index.js
+$ npm start
 ```
 
 By default the application runs on port 3000, however this can be overrided by setting the `PORT` environment variable.
