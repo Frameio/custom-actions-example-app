@@ -5,7 +5,7 @@ const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
-app.post('/', function (req, res) {
+app.post('/actions', function (req, res) {
   if (req.body.data) {
     const { name, color } = req.body.data;
 
