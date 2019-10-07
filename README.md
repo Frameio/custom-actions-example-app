@@ -44,6 +44,10 @@ $ npm install
 $ npm start
 ```
 
-By default the application runs on port 3000, however this can be overrode by setting the `PORT` environment variable.
+By default the application runs on port 3000, however this can be overridden by setting the `PORT` environment variable.
+
+## Troubleshooting
+
+If you need help getting ngrok to work, you can check out our [troubleshooting guide for ngrok](https://docs.frame.io/docs/how-to-setup-and-troubleshoot-ngrok-mac). (It has a few tips for Glitch as well.) 
 
 
