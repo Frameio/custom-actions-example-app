@@ -2,10 +2,10 @@
   "name": "custom-actions-example-app",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "examples/helloWorld.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node examples/helloWorld.js"
   },
   "repository": {
     "type": "git",
