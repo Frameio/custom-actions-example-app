@@ -38,11 +38,11 @@ function invokeLambda (caller, traceID, url, name) {
 }
 
 exports.handler = async function (event, context) {
-    // Get the parent trace ID for our original API Gateway invocation, 
-    // we'll pass it to our second Lambda
+    // Save the trace ID from our upstream API Gateway trigger,
+    // We'll pass it to our second Lambda.
     const traceID = process.env._X_AMZN_TRACE_ID;
 
-    // Get the name of this Lambda from AWS context, pass it to our second Lambda
+    // Get the name of the Lambda from AWS context - also pass to second Lambda
     const caller = context.functionName;
 
     let id = JSON.parse(event.body).resource.id;
