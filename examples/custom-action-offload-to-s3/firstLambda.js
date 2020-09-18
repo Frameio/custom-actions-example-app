@@ -1,17 +1,26 @@
-const { s3Uploader } = require('./api');
+const { fetchAsset, invokeLambda } = require('./modules/api');
 
-exports.handler = async (event) => {
-    let { caller, parentTraceID, url, name } = event;
-    
-    // Logs for conveniente searching in X-Ray and CloudWatch
-    console.log(`debug: ${process.env._X_AMZN_TRACE_ID}`);
-    console.log(`Called by ${caller} with trace ID: ${parentTraceID}. Begin uploading ${name}...`);
+exports.handler = async function (event, context) {
+    // Save the X-ray Trace ID and and this Lambda's function name.
+    // We'll pass them to our second 'file handler' Lambda.
+    const firstLambdaTraceID = process.env._X_AMZN_TRACE_ID;
+    const caller = context.functionName;
+
+    let id = JSON.parse(event.body).resource.id;
+    let { url, name} = await fetchAsset(id);
 
     try {
-        await s3Uploader(url, name);
+        await invokeLambda(caller, firstLambdaTraceID, url, name);
+        let returnPayload = {
+            statusCode: 202, 
+            body: JSON.stringify({
+                'title': 'Job received',
+                'description': `Your backup job for '${name}' has been triggered.`,
+                'traceID': `${firstLambdaTraceID}`
+            })
+        };
+        return returnPayload;
     } catch(err) {
-        return (`error: ${err}`);
+        return (`Hit a problem: ${err.message}`);
     }
-    
-    return (console.log(`Done uploading ${name}!`));
-  };
+};

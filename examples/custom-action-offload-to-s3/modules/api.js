@@ -20,7 +20,7 @@ async function fetchAsset (id) {
     }
 }
 
-function invokeLambda (caller, traceID, url, name) { 
+function invokeLambda (caller, firstLambdaTraceID, url, name) { 
 
     const lambda = new AWS.Lambda();
 
@@ -29,7 +29,7 @@ function invokeLambda (caller, traceID, url, name) {
         InvocationType: 'Event', // returns statusCode 202 on success. See invoke() SDK for info
         Payload: JSON.stringify({
             caller: caller,
-            traceID: traceID,
+            firstLambdaTraceID: firstLambdaTraceID,
             url: url, 
             name: name })
     };
