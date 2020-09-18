@@ -1,64 +1,17 @@
-const AWS = require('aws-sdk');
-const fetch = require("node-fetch");
+const { s3Uploader } = require('./api');
 
-async function fetchDataFromAPI (id) {
-    const token = process.env.FRAMEIO_TOKEN;
-    let url = `http://api.frame.io/v2/assets/${id}`;
-    let requestOptions = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    };
+exports.handler = async (event) => {
+    let { caller, parentTraceID, url, name } = event;
+    
+    // Logs for conveniente searching in X-Ray and CloudWatch
+    console.log(`debug: ${process.env._X_AMZN_TRACE_ID}`);
+    console.log(`Called by ${caller} with trace ID: ${parentTraceID}. Begin uploading ${name}...`);
+
     try {
-        let response = await fetch(url, requestOptions);
-        let result = await response.json();
-        return { url: result.original, name: result.name };
+        await s3Uploader(url, name);
     } catch(err) {
         return (`error: ${err}`);
     }
-}
-
-function invokeLambda (caller, traceID, url, name) { 
-
-    const lambda = new AWS.Lambda();
-
-    let req = {
-        FunctionName: 'kstone-custom-action-offload-to-s3-second-lambda',
-        InvocationType: 'Event', // returns statusCode 202 on success. See invoke() SDK for info
-        Payload: JSON.stringify({
-            caller: caller,
-            traceID: traceID,
-            url: url, 
-            name: name })
-    };
-
-    return lambda.invoke(req).promise();
-}
-
-exports.handler = async function (event, context) {
-    // Save the trace ID from our upstream API Gateway trigger,
-    // We'll pass it to our second Lambda.
-    const traceID = process.env._X_AMZN_TRACE_ID;
-
-    // Get the name of the Lambda from AWS context - also pass to second Lambda
-    const caller = context.functionName;
-
-    let id = JSON.parse(event.body).resource.id;
-    let { url, name} = await fetchDataFromAPI(id);
-    try {
-        await invokeLambda(caller, traceID, url, name);
-        let returnPayload = {
-            statusCode: 202, 
-            body: JSON.stringify({
-                'title': 'Job received',
-                'description': `Your backup job for '${name}' has been triggered.`,
-                'traceID': `${traceID}`
-            })
-        };
-        return returnPayload;
-    } catch(err) {
-        return (`Hit a problem: ${err.message}`);
-    }
-};
+    
+    return (console.log(`Done uploading ${name}!`));
+  };

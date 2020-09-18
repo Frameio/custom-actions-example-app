@@ -1,23 +1,25 @@
-const AWS = require('aws-sdk');
-const fetch = require("node-fetch");
+const { fetchAsset, invokeLambda } = require('./api');
 
-const s3 = new AWS.S3();
+exports.handler = async function (event, context) {
+    // Save the X-ray Trace ID and and this Lambda's function name.
+    // We'll pass them to our second 'file handler' Lambda.
+    const traceID = process.env._X_AMZN_TRACE_ID;
+    const caller = context.functionName;
 
-exports.handler = async (event) => {
-    let { caller, traceID, url, name } = event;
-
+    let id = JSON.parse(event.body).resource.id;
+    let { url, name} = await fetchAsset(id);
     try {
-      console.log(`Called by ${caller} with traceID ${traceID}. Begin uploading ${name}...`);
-      let response = await fetch(url);
-      let buffer = await response.buffer();
-      await s3.putObject({
-          Bucket: process.env.BUCKET_NAME,
-          Key: name,
-          Body: buffer,
-        }).promise();
-    }
-    catch (err) {
+        await invokeLambda(caller, traceID, url, name);
+        let returnPayload = {
+            statusCode: 202, 
+            body: JSON.stringify({
+                'title': 'Job received',
+                'description': `Your backup job for '${name}' has been triggered.`,
+                'traceID': `${traceID}`
+            })
+        };
+        return returnPayload;
+    } catch(err) {
         return (`Hit a problem: ${err.message}`);
-    }      
-    return (console.log(`Done uploading ${name}!`));
-  };
+    }
+};
