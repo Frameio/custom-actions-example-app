@@ -1,0 +1,98 @@
+{
+    "resource": "/kstone-custom-action-offload-to-s3",
+    "path": "/kstone-custom-action-offload-to-s3",
+    "httpMethod": "POST",
+    "headers": {
+      "content-type": "application/json",
+      "Host": "188hrg8gxb.execute-api.us-east-2.amazonaws.com",
+      "User-Agent": "Frame.io API",
+      "X-Amzn-Trace-Id": "Root=1-5f4ad89b-b52895fe5e608f091fb6b7d8",
+      "X-Forwarded-For": "52.44.243.35",
+      "X-Forwarded-Port": "443",
+      "X-Forwarded-Proto": "https",
+      "x-frameio-request-timestamp": "1598740635",
+      "x-frameio-signature": "v0=fdd82f426536c5a927f29eeab7e01e177c4c0ca0a33f2827817c32e530fddaa2"
+    },
+    "multiValueHeaders": {
+      "content-type": [
+        "application/json"
+      ],
+      "Host": [
+        "188hrg8gxb.execute-api.us-east-2.amazonaws.com"
+      ],
+      "User-Agent": [
+        "Frame.io API"
+      ],
+      "X-Amzn-Trace-Id": [
+        "Root=1-5f4ad89b-b52895fe5e608f091fb6b7d8"
+      ],
+      "X-Forwarded-For": [
+        "52.44.243.35"
+      ],
+      "X-Forwarded-Port": [
+        "443"
+      ],
+      "X-Forwarded-Proto": [
+        "https"
+      ],
+      "x-frameio-request-timestamp": [
+        "1598740635"
+      ],
+      "x-frameio-signature": [
+        "v0=fdd82f426536c5a927f29eeab7e01e177c4c0ca0a33f2827817c32e530fddaa2"
+      ]
+    },
+    "queryStringParameters": null,
+    "multiValueQueryStringParameters": null,
+    "pathParameters": null,
+    "stageVariables": null,
+    "requestContext": {
+      "resourceId": "51f4b5",
+      "resourcePath": "/kstone-custom-action-offload-to-s3",
+      "httpMethod": "POST",
+      "extendedRequestId": "SDbIUGgdCYcF33A=",
+      "requestTime": "29/Aug/2020:22:37:15 +0000",
+      "path": "/default/kstone-custom-action-offload-to-s3",
+      "accountId": "720872555379",
+      "protocol": "HTTP/1.1",
+      "stage": "default",
+      "domainPrefix": "188hrg8gxb",
+      "requestTimeEpoch": 1598740635596,
+      "requestId": "eeb69611-0501-4d2f-89fd-be9b8fce3e64",
+      "identity": {
+        "cognitoIdentityPoolId": null,
+        "accountId": null,
+        "cognitoIdentityId": null,
+        "caller": null,
+        "sourceIp": "52.44.243.35",
+        "principalOrgId": null,
+        "accessKey": null,
+        "cognitoAuthenticationType": null,
+        "cognitoAuthenticationProvider": null,
+        "userArn": null,
+        "userAgent": "Frame.io API",
+        "user": null
+      },
+      "domainName": "188hrg8gxb.execute-api.us-east-2.amazonaws.com",
+      "apiId": "188hrg8gxb"
+    },
+    "body": {
+      "action_id": "44f40b4a-65e9-479a-b2bf-40ec57111c88",
+      "interaction_id": "706e2345-14d7-4784-9e76-81a42e206915",
+      "project": {
+        "id": "5065bd0f-7d61-48f2-beec-7bc4313d0b23"
+      },
+      "resource": {
+        "id": "ce611de8-79b8-4bf5-bdf3-0b5a72f7dbb6",
+        "type": "asset"
+      },
+      "team": {
+        "id": "aa891687-4b1e-4150-9b6d-9e4911c5b436"
+      },
+      "type": "custom.action.demo",
+      "user": {
+        "id": "59c9ade1-311b-4c3b-8231-b9d88e9a1a85"
+      }
+    },
+    "isBase64Encoded": false
+  }
