@@ -1,56 +1,57 @@
-const AWS = require('aws-sdk');
-const fetch = require('node-fetch');
+const { fetchAsset, invokeLambda } = require('./modules/api');
 
-async function fetchAsset (id) {
-    const token = process.env.FRAMEIO_TOKEN;
-    let path = `http://api.frame.io/v2/assets/${id}`;
-    let requestOptions = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    };
+exports.handler = async function (event, context) {
+    // Save the X-ray Trace ID and and this Lambda's function name.
+    // We'll pass them to our second 'file handler' Lambda.
+    const firstLambdaTraceID = process.env._X_AMZN_TRACE_ID;
+    const caller = context.functionName;
+
+    let id = JSON.parse(event.body).resource.id;
+    console.log(`debug id: ${id}`);
+    let { url, name } = await fetchAsset(id);
+    console.log(`debug fetched data: name ${name}`);
+    
+    // To receive data from the Frame.io user in an Action,
+    // Build two paths, a 'base case' where there is *no* data
+    // Object available in the Custom Action payload, which means
+    // It is the first step of the form.  Then handle the 
+    // "special" case where the data object is available which means
+    // the user has entered data into the Action.
     try {
-        let response = await fetch(path, requestOptions);
-        let result = await response.json();
-        return { url: result.original, name: result.name };
+        if (JSON.parse(event.body).data) {
+            console.log('Path with data from the Action');
+            let returnPayload = {
+                statusCode: 202, 
+                body: JSON.stringify({
+                    'title': 'Job received',
+                    'description': `Your backup job for '${name}' has been triggered.`,
+                    'traceID': `${firstLambdaTraceID}`
+                    })
+                };
+            let data = JSON.parse(event.body).data;
+            console.log(data);
+            // Here is where you handle the metadata submitted by the Frame.io user
+            return returnPayload;
+        }
+        else {
+            console.log('Base case: User seeing Action for the first time.');
+            await invokeLambda(caller, firstLambdaTraceID, url, name);
+            let returnPayload = {
+            statusCode: 202, 
+            body: JSON.stringify({
+                "title": "Archive your file",
+                "description": "Enter your metadata below:",
+                "fields": [{
+                    "type": "text",
+                    "name": "metadata",
+                    "label": "Metadata"
+                    }]
+                })
+            };
+            return returnPayload;
+            }
     } catch(err) {
-        return (`error: ${err}`);
+        console.log(err);
+        return (`Hit a problem: ${err.message}`);
     }
-}
-
-function invokeLambda (caller, firstLambdaTraceID, url, name) { 
-
-    const lambda = new AWS.Lambda();
-
-    let req = {
-        FunctionName: 'kstone-custom-action-offload-to-s3-second-lambda',
-        InvocationType: 'Event', // returns statusCode 202 on success. See invoke() SDK for info
-        Payload: JSON.stringify({
-            caller: caller,
-            firstLambdaTraceID: firstLambdaTraceID,
-            url: url, 
-            name: name })
-    };
-
-    return lambda.invoke(req).promise();
-}
-
-async function s3Uploader(url, name) {
-
-    const s3 = new AWS.S3();
-    
-    let response = await fetch(url);
-    let stream = response.body;
-
-    const params = {
-        Bucket: process.env.BUCKET_NAME,
-        Key: name,
-        Body: stream
-    };
-    
-    return (s3.upload(params).promise());
-}
-
-module.exports = { fetchAsset, invokeLambda, s3Uploader };
+};
