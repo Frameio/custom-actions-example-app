@@ -14,6 +14,7 @@ async function fetchAsset (id) {
     try {
         let response = await fetch(url, requestOptions);
         let result = await response.json();
+        console.log(`lxtv debug: name: ${result.name}, url: ${result.original}`);
         return { url: result.original, name: result.name };
     } catch(err) {
         return (`error: ${err}`);
