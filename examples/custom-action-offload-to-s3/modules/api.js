@@ -3,7 +3,7 @@ const fetch = require('node-fetch');
 
 async function fetchAsset (id) {
     const token = process.env.FRAMEIO_TOKEN;
-    let url = `http://api.frame.io/v2/assets/${id}`;
+    let path = `http://api.frame.io/v2/assets/${id}`;
     let requestOptions = {
       method: 'GET',
       headers: {
@@ -12,7 +12,7 @@ async function fetchAsset (id) {
       }
     };
     try {
-        let response = await fetch(url, requestOptions);
+        let response = await fetch(path, requestOptions);
         let result = await response.json();
         return { url: result.original, name: result.name };
     } catch(err) {
