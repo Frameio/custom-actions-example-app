@@ -15,8 +15,9 @@ async function fetchAsset (id) {
         let response = await fetch(url, requestOptions);
         let result = await response.json();
         console.log(`lxtv debug: name: ${result.name}, url: ${result.original}`);
-        if (result.cover_asset) {
-            console.log(`found cover asset.  name: ${result.cover_asset.name}, url: ${result.cover_asset.original}`);
+        console.log(`${result.type}`);
+        if (result.type == "version_stack") {
+            console.log(`resource is a version stack. debug cover asset -  name: ${result.cover_asset.name}, url: ${result.cover_asset.original}`);
             return { url: result.cover_asset.original, name: result.cover_asset.name };
         } else {
             return { url: result.original, name: result.name };
