@@ -9,7 +9,7 @@ exports.handler = async function (event, context) {
     let id = JSON.parse(event.body).resource.id;
     console.log(`debug id: ${id}`);
     let { url, name } = await fetchAsset(id);
-    console.log(`debug fetched data: name ${name}`);
+    console.log(`debug fetched data: name ${name}, url ${url}`);
     
     // To receive data from the Frame.io user in an Action,
     // Build two paths, a 'base case' where there is *no* data
@@ -28,6 +28,9 @@ exports.handler = async function (event, context) {
                     'traceID': `${firstLambdaTraceID}`
                     })
                 };
+            let data = JSON.parse(event.body).data;
+            console.log(data);
+            // Here is where you handle the metadata submitted by the Frame.io user
             return returnPayload;
         }
         else {
