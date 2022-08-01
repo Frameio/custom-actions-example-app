@@ -22,7 +22,7 @@ For more information about how custom actions work, check out our [documentation
 * Developer account with Frame.io - [https://developer.frame.io](https://developer.frame.io/)
 * Web server with a publicly accessible address - we recommend trying: 
   * [Glitch](https://glitch.com/) 
-  * [ngrok](https://https://ngrok.com/)
+  * [ngrok](https://ngrok.com/)
 
 NOTE: If you just want to see the sample run, we've set up a version for you here: [Custom Actions with Glitch](https://glitch.com/~frameio-custom-actions) If you choose to use this version, make sure you put the trailing slash in at the end of the address when you set up your custom action at [developer.frame.io](https://developer.frame.io) like so: [https://frameio-custom-action.glitch.me/](https://frameio-custom-action.glitch.me) 
 
