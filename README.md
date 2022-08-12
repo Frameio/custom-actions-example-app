@@ -20,6 +20,7 @@ For more information about how custom actions work, check out our [documentation
 ## Pre-requisites 
 
 * Developer account with Frame.io - [https://developer.frame.io](https://developer.frame.io/)
+* Note that you will need **Team Manager** permissions to create Custom Actions for your team.
 * Web server with a publicly accessible address - we recommend trying: 
   * [Glitch](https://glitch.com/) 
   * [ngrok](https://ngrok.com/)
