@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/Frameio/custom-actions-example-app#readme",
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.19.2"
   }
 }
